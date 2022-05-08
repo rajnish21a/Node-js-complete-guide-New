@@ -1,3 +1,4 @@
+const res = require('express/lib/response');
 const fs = require('fs');
 const path = require('path');
 
@@ -27,6 +28,7 @@ module.exports = class Product {
 
   save() {
     getProductsFromFile(products => {
+      this.id = Math.random().toString();
       products.push(this);
       fs.writeFile(p, JSON.stringify(products), err => {
         console.log(err);
@@ -36,5 +38,12 @@ module.exports = class Product {
 
   static fetchAll(cb) {
     getProductsFromFile(cb);
+  }
+
+  static searchById(id,cb){
+    this.getProductsFromFile((id, Products)=>{
+      const product = Products.find(product=>{ product.id === id})
+      return product;
+    })
   }
 };
